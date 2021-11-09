@@ -21,7 +21,7 @@ use regex::Regex;
 ///     #[test]
 ///     fn newline_hello_newline_world() {
 ///         assert_eq!(
-///             "    \n    hello\n    world",
+///             "\n    hello\n    world",
 ///             crate::indent::indent("\nhello\nworld", 1, 4)
 ///         );
 ///     }
@@ -46,9 +46,15 @@ pub fn indent<S: Into<String>>(s: S, num_of_indents: usize, spaces_per_indent: u
         .lines()
         .enumerate()
         .map(|(i, ss)| {
+            let tmp;
             [
                 if i > 0 { "\n" } else { "" },
-                &vec![""; num_of_indents + 1].join("\t"),
+                if !ss.is_empty() {
+                    tmp = vec![""; num_of_indents + 1].join("\t");
+                    &tmp
+                } else {
+                    ss
+                },
                 ss,
             ]
             .concat()
@@ -73,7 +79,7 @@ mod tests {
     #[test]
     fn newline_hello_newline_world() {
         assert_eq!(
-            "    \n    hello\n    world",
+            "\n    hello\n    world",
             super::indent("\nhello\nworld", 1, 4)
         );
     }
