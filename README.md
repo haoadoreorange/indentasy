@@ -17,9 +17,9 @@ mod tests {
     #[test]
     fn newline_hello_newline_world() {
         assert_eq!(
-            "\n    hello\n    world",
-            crate::indent::indent("\nhello\nworld", 1, 4)
-        );
+            "    \n    hello\n    world",
+            super::indent("\nhello\nworld", 1, 4)
+        ); 
     }
 
     #[test]

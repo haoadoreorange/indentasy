@@ -1,7 +1,7 @@
 //! # Indentasy
-//! 
+//!
 //! Indent like a party
-//! 
+//!
 //! Rust implementation of https://cwestblog.com/2014/01/02/javascript-indenting-text/
 
 use regex::Regex;
@@ -21,7 +21,7 @@ use regex::Regex;
 ///     #[test]
 ///     fn newline_hello_newline_world() {
 ///         assert_eq!(
-///             "\n    hello\n    world",
+///             "    \n    hello\n    world",
 ///             crate::indent::indent("\nhello\nworld", 1, 4)
 ///         );
 ///     }
@@ -46,20 +46,12 @@ pub fn indent<S: Into<String>>(s: S, num_of_indents: usize, spaces_per_indent: u
         .lines()
         .enumerate()
         .map(|(i, ss)| {
-            if !ss.is_empty() {
-                [
-                    if (i == 0 && &s[0..1] == "\n") || i > 0 {
-                        "\n"
-                    } else {
-                        ""
-                    },
-                    &vec![""; num_of_indents + 1].join("\t"),
-                    ss,
-                ]
-                .concat()
-            } else {
-                ss.to_string()
-            }
+            [
+                if i > 0 { "\n" } else { "" },
+                &vec![""; num_of_indents + 1].join("\t"),
+                ss,
+            ]
+            .concat()
         })
         .collect::<String>();
     if spaces_per_indent < 1 {
@@ -81,7 +73,7 @@ mod tests {
     #[test]
     fn newline_hello_newline_world() {
         assert_eq!(
-            "\n    hello\n    world",
+            "    \n    hello\n    world",
             super::indent("\nhello\nworld", 1, 4)
         );
     }
