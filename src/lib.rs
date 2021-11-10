@@ -45,17 +45,17 @@ pub fn indent<S: Into<String>>(s: S, num_of_indents: usize, spaces_per_indent: u
     let s = s
         .lines()
         .enumerate()
-        .map(|(i, ss)| {
+        .map(|(i, line)| {
             let tmp;
             [
                 if i > 0 { "\n" } else { "" },
-                if !ss.is_empty() {
+                if !line.is_empty() {
                     tmp = vec![""; num_of_indents + 1].join("\t");
                     &tmp
                 } else {
-                    ss
+                    ""
                 },
-                ss,
+                line,
             ]
             .concat()
         })
