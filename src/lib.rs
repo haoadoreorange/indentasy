@@ -1,7 +1,5 @@
 #![doc = include_str!("../README.md")]
 
-use regex::Regex;
-
 /// Indent text
 ///
 /// # Examples
@@ -30,8 +28,7 @@ use regex::Regex;
 /// }
 /// ```
 pub fn indent<S: AsRef<str>>(s: S, num_of_indents: usize, spaces_per_indent: usize) -> String {
-    let s = s
-        .as_ref()
+    s.as_ref()
         .lines()
         .enumerate()
         .map(|(i, line)| {
@@ -39,7 +36,12 @@ pub fn indent<S: AsRef<str>>(s: S, num_of_indents: usize, spaces_per_indent: usi
             [
                 if i > 0 { "\n" } else { "" },
                 if !line.is_empty() {
-                    tmp = vec![""; num_of_indents + 1].join("\t");
+                    tmp = if spaces_per_indent < 1 {
+                        vec![""; num_of_indents + 1].join("\t")
+                    } else {
+                        vec![""; num_of_indents + 1]
+                            .join(&vec![""; spaces_per_indent + 1].join(" "))
+                    };
                     &tmp
                 } else {
                     ""
@@ -48,14 +50,7 @@ pub fn indent<S: AsRef<str>>(s: S, num_of_indents: usize, spaces_per_indent: usi
             ]
             .concat()
         })
-        .collect::<String>();
-    if spaces_per_indent < 1 {
-        return s;
-    }
-    Regex::new(r"(?m)^\t+")
-        .unwrap()
-        .replace_all(&s, &vec![""; spaces_per_indent + 1].join(" ")[..])
-        .into_owned()
+        .collect::<String>()
 }
 
 #[cfg(test)]
